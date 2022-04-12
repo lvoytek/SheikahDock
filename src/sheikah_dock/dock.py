@@ -1,4 +1,5 @@
 import sys
+import rune
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -12,12 +13,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self.box1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.set_child(self.box1)
 
-        self.button = Gtk.Button(label="Test")
-        self.box1.append(self.button)
-        self.button.connect('clicked', self.print_test)
-
-    def print_test(self, button):
-        print("Test")
+        self.rune1 = rune.Rune()
+        self.box1.append(self.rune1)
 
 
 class SheikahDock(Adw.Application):
