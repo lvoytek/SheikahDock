@@ -32,9 +32,17 @@ class MainWindow(Gtk.ApplicationWindow):
             self.runes.append(rune.Rune(self.get_rune_size()))
             self.rune_box.append(self.runes[i])
 
+        i = 0
+        for app_name in self.get_apps_list():
+            self.runes[i].set_app_name(app_name)
+            i += 1
+
     def get_rune_size(self):
         return int((get_default_screen_width() - 2 * self._edge_width - (self._num_runes - 1) * self._separation_width)
                    / self._num_runes)
+
+    def get_apps_list(self):
+        return ['Files', 'Firefox Web Browser', 'Tilix', 'LibreOffice']
 
 
 class SheikahDock(Adw.Application):

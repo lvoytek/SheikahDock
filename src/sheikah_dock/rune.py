@@ -1,7 +1,15 @@
 import gi
 import launcher
 gi.require_version('Gtk', '4.0')
-from gi.repository import Gtk, GdkPixbuf
+from gi.repository import Gtk, GdkPixbuf, Gio
+
+
+def get_app_from_name(name):
+    for application in Gio.AppInfo.get_all():
+        if application.get_display_name() == name:
+            return application
+
+    return None
 
 
 class Rune(Gtk.Overlay):
@@ -14,5 +22,17 @@ class Rune(Gtk.Overlay):
         image.set_size_request(size, size)
 
         self.set_child(image)
-        self.launcher = launcher.Launcher()
+        self.launcher = launcher.Launcher(self)
         self.add_overlay(self.launcher)
+
+        self._appname = None
+        self._app = None
+
+    def set_app_name(self, name):
+        if name != self._appname:
+            self._appname = name
+            self._app = get_app_from_name(name)
+
+    def launch(self):
+        if self._app is not None:
+            self._app.launch()

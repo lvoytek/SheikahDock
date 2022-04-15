@@ -5,13 +5,11 @@ from gi.repository import Gtk
 
 class Launcher(Gtk.Button):
 
-    def __init__(self):
+    def __init__(self, parent):
         super().__init__()
-        self._appname = None
+        self._parent = parent
         self.connect('clicked', self.launch)
 
-    def set_app_name(self, name):
-        self._appname = name
-
     def launch(self, button):
-        print("test")
+        self._parent.launch()
+
