@@ -3,18 +3,38 @@ import rune
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, Gdk
+
+
+def get_default_screen_width():
+    display = Gdk.Display.get_default()
+    return display.get_primary_monitor().get_geometry().width
 
 
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.set_decorated(False)
-        self.box1 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.set_child(self.box1)
+        self._num_runes = 6
+        self._edge_width = int(get_default_screen_width() / 20)
+        self._separation_width = int(get_default_screen_width() / 40)
 
-        self.rune1 = rune.Rune()
-        self.box1.append(self.rune1)
+        self.set_decorated(False)
+        self.set_default_size(get_default_screen_width(), self.get_rune_size())
+
+        self.rune_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+
+        self.rune_box.set_spacing(self._separation_width)
+        self.rune_box.set_margin_start(self._edge_width)
+        self.set_child(self.rune_box)
+
+        self.runes = []
+        for i in range(self._num_runes):
+            self.runes.append(rune.Rune(self.get_rune_size()))
+            self.rune_box.append(self.runes[i])
+
+    def get_rune_size(self):
+        return int((get_default_screen_width() - 2 * self._edge_width - (self._num_runes - 1) * self._separation_width)
+                   / self._num_runes)
 
 
 class SheikahDock(Adw.Application):
