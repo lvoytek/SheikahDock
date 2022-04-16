@@ -38,15 +38,37 @@ class MainWindow(Gtk.ApplicationWindow):
             i += 1
 
         self._active_rune = 0
-        evk = Gtk.EventControllerMotion.new()
-        evk.connect("motion", self.mouse_motion)
-        self.add_controller(evk)
+        mouse_motion_control = Gtk.EventControllerMotion.new()
+        mouse_motion_control.connect("motion", self.mouse_motion)
+        self.add_controller(mouse_motion_control)
+
+        key_control = Gtk.EventControllerKey.new()
+        key_control.connect("key-pressed", self.key_press)
+        self.add_controller(key_control)
 
     def mouse_motion(self, motion, x, y):
         for i in range(self._num_runes):
             if self.runes[i].contains(x - self._edge_width - i * (self.get_rune_size() + self._separation_width), y):
                 self.set_active_rune(i)
                 break
+
+    def key_press(self, keypress, keyval, keycode, state):
+        if keyval in {Gdk.KEY_Left, Gdk.KEY_leftarrow}:
+            self.move_active_rune_left()
+        elif keyval in {Gdk.KEY_Right, Gdk.KEY_rightarrow}:
+            self.move_active_rune_right()
+
+    def move_active_rune_right(self):
+        if self._active_rune >= len(self.runes) - 1:
+            self.set_active_rune(0)
+        else:
+            self.set_active_rune(self._active_rune + 1)
+
+    def move_active_rune_left(self):
+        if self._active_rune <= 0:
+            self.set_active_rune(len(self.runes) - 1)
+        else:
+            self.set_active_rune(self._active_rune - 1)
 
     def set_active_rune(self, rune_num):
         self.runes[self._active_rune].deactivate_rune()
