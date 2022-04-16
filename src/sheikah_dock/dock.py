@@ -37,12 +37,31 @@ class MainWindow(Gtk.ApplicationWindow):
             self.runes[i].set_app_name(app_name)
             i += 1
 
+        self._active_rune = 0
+        evk = Gtk.EventControllerMotion.new()
+        evk.connect("motion", self.mouse_motion)
+        self.add_controller(evk)
+
+    def mouse_motion(self, motion, x, y):
+        for i in range(self._num_runes):
+            if self.runes[i].contains(x - self._edge_width - i * (self.get_rune_size() + self._separation_width), y):
+                self.set_active_rune(i)
+                break
+
+    def set_active_rune(self, rune_num):
+        self.runes[self._active_rune].deactivate_rune()
+        self._active_rune = rune_num
+        self.runes[self._active_rune].activate_rune()
+
     def get_rune_size(self):
         return int((get_default_screen_width() - 2 * self._edge_width - (self._num_runes - 1) * self._separation_width)
                    / self._num_runes)
 
     def get_apps_list(self):
         return ['Files', 'Firefox Web Browser', 'Tilix', 'LibreOffice']
+
+    def mousemove(self, widget, event):
+        print("mouse")
 
 
 class SheikahDock(Adw.Application):

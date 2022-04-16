@@ -58,4 +58,3 @@ class Rune(Gtk.Overlay):
     def launch(self):
         if self._app is not None:
             self._app.launch()
-            self.activate_rune()
