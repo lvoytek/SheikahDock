@@ -96,6 +96,10 @@ class SheikahDock(Adw.Application):
         self.win.present()
 
 
-if __name__ == "__main__":
-    app = SheikahDock(application_id="com.example.GtkApplication")
+def main():
+    app = SheikahDock(application_id="com.github.lvoytek.sheikahdock")
     app.run(sys.argv)
+
+
+if __name__ == "__main__":
+    main()
