@@ -39,7 +39,14 @@ class Rune(Gtk.Overlay):
             self._app = get_app_from_name(name)
 
             icon = self._app.get_icon()
-            self._app_image.set_from_icon_name(icon.to_string() if icon else "gtk-missing-icon")
+
+            # check if icon is a gtk icon name or snap filename
+            if icon.to_string()[0] != '/':
+                self._app_image.set_from_icon_name(icon.to_string())
+            else:
+                # if snap try to replace with existing gtk icon based on desktop filename
+                self._app_image.set_from_icon_name(self._app.get_id().replace('_', '.').split('.')[0])
+
             self._app_image.set_icon_size(Gtk.IconSize.LARGE)
             self._app_image.set_pixel_size(int(self._size * .6))
 
