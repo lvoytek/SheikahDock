@@ -57,6 +57,8 @@ class MainWindow(Gtk.ApplicationWindow):
             self.move_active_rune_left()
         elif keyval in {Gdk.KEY_Right, Gdk.KEY_rightarrow}:
             self.move_active_rune_right()
+        elif keyval in {Gdk.KEY_space, Gdk.KEY_Return}:
+            self.runes[self._active_rune].launch()
 
     def move_active_rune_right(self):
         if self._active_rune >= len(self.runes) - 1:

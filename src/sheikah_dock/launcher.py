@@ -8,6 +8,7 @@ class Launcher(Gtk.Button):
     def __init__(self, parent):
         super().__init__()
         self._parent = parent
+        self.set_can_focus(False)
         self.connect('clicked', self.launch)
 
     def launch(self, button):
